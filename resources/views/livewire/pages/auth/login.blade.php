@@ -20,7 +20,19 @@ new #[Layout('layouts.guest')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('admin-dashboard', absolute: false), navigate: true);
+        $user = Auth::user();
+
+        $roles = $user->getRoleNames();
+
+        if ($roles->contains('admin')) {
+            $this->redirectIntended(default: route('admin-dashboard', absolute: false), navigate: true);
+        }
+        elseif ($roles->contains('group-leader'))  {
+            $this->redirectIntended(default: route('group-leader-dashboard', absolute: false), navigate: true);
+        }
+        elseif ($roles->contains('user'))  {
+            $this->redirectIntended(default: route('users-dashboard', absolute: false), navigate: true);
+        }
     }
 }; ?>
 
