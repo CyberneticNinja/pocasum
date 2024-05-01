@@ -35,6 +35,23 @@ class UserSeeder extends Seeder
             ['name' => 'Piper Chapman', 'email' => 'piper.chapman@example.com', 'password' => Hash::make('password')],
             ['name' => 'Quentin Coldwater', 'email' => 'quentin.coldwater@example.com', 'password' => Hash::make('password')],
             ['name' => 'Rachel Green', 'email' => 'rachel.green@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Ricky James', 'email' => 'rjames@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Jane Smith', 'email' => 'jane.smith@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Alex Johnson', 'email' => 'alex.johnson@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Bob Brown', 'email' => 'bob.brown@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Charlie Davis', 'email' => 'charlie.davis@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Diana Ross', 'email' => 'diana.ross@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Edwin Norton', 'email' => 'edwin.norton@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Fiona Apple', 'email' => 'fiona.apple@example.com', 'password' => Hash::make('password')],
+            ['name' => 'George Clooney', 'email' => 'george.clooney@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Hannah Montana', 'email' => 'hannah.montana@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Ian Somerhalder', 'email' => 'ian.somerhalder@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Jessica Alba', 'email' => 'jessica.alba@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Chris Reese', 'email' => 'Chrids.reese@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Diana', 'email' => 'diana.palmer@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Mike Ross', 'email' => 'mike.ross@example.com', 'password' => Hash::make('password')],
+            ['name' => 'Nina Dobrev', 'email' => 'nina.dobrev@example.com', 'password' => Hash::make('password')]
+
         ]);
     }
 }
