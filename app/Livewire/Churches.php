@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Church;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class Churches extends Component
@@ -17,6 +18,7 @@ class Churches extends Component
     public $currentChurch = null;  // Stores the current church being edited or viewed
 
     public array $churchInfo = [];
+
     public function mount()
     {
         // Check if the user is not authenticated
@@ -35,9 +37,17 @@ class Churches extends Component
 
     public function editChurch(Church $church)
     {
-        $this->showForm = true;
+        $this->tableSummary = false;
+        $this->createForm = false;
         $this->editMode = true;
         $this->currentChurch = $church;
+
+         $this->churchInfo['name'] = $this->currentChurch->name;
+         $this->churchInfo['description'] = $this->currentChurch->description;
+
+
+        //  $this->showForm = true;
+        //  $this->editMode = true;
     }
 
     public function createChurch()
@@ -49,15 +59,29 @@ class Churches extends Component
 
     public function saveChurch()
     {
-//        $this->currentChurch->name = 'Love-Joy church';
-        $churchInfo = [];
-        $this->validate($this->getValidationRules());
+        if($this->editMode)
+        {
+            $this->validate($this->getValidationRules('edit'));
+            $this->currentChurch->name = $this->churchInfo['name'];
+            $this->currentChurch->description = $this->churchInfo['description'];
+            $this->currentChurch->save();
+            $this->resetForm();
+            $this->churches = Church::all(); // Fetch all churches
+            $this->churchInfo = [];
+        }
+        elseif($this->createForm)
+        {
+            //        $this->currentChurch->name = 'Love-Joy church';
+//        $churchInfo = [];
+            $this->validate($this->getValidationRules('create'));
 //        dd($this->churchInfo['description']);
-        $this->currentChurch->name = $this->churchInfo['name'];
-        $this->currentChurch->description = $this->churchInfo['description'];
-        $this->currentChurch->save();
-        $this->resetForm();
-        $this->churches = Church::all(); // Fetch all churches
+            $this->currentChurch->name = $this->churchInfo['name'];
+            $this->currentChurch->description = $this->churchInfo['description'];
+            $this->currentChurch->save();
+            $this->resetForm();
+            $this->churches = Church::all(); // Fetch all churches
+            $this->churchInfo = [];
+        }
     }
 
     public function deleteChurch(Church $church)
@@ -66,20 +90,29 @@ class Churches extends Component
         $this->resetForm();
         $this->churches = Church::all(); // Refresh the churches list
     }
-    protected function getValidationRules()
+
+    protected function getValidationRules(string $type)
     {
-        if ($this->createForm) {
+        if ($type === 'create') {
             return [
                 'churchInfo.name' => 'required|string|max:255|unique:churches,name',
                 'churchInfo.description' => 'required|string'
             ];
-        } elseif ($this->editMode) {
+        } elseif ($type === 'edit') {
+            $churchId = $this->currentChurch->id;
+
             return [
-                'currentChurch.name' => 'required|string|max:255|unique:churches,name,' . $this->currentChurch->id,
-                'currentChurch.description' => 'string'
+                'churchInfo.name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('churches', 'name')->ignore($churchId)
+                ],
+                'churchInfo.description' => 'required|string'
             ];
         }
     }
+
     public function resetForm()
     {
         $this->tableSummary = true;
