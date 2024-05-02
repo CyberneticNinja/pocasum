@@ -53,14 +53,19 @@
                     <form wire:submit.prevent="saveChurch">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Church Name:</label>
-                            <input wire:model="churchInfo.name" id="name" type="text" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <input wire:model="churchInfo.name" id="name" type="text"
+                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="mt-4">
-                            <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
-                            <textarea wire:model="churchInfo.description" id="description" rows="4" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            <label for="description"
+                                   class="block text-sm font-medium text-gray-700">Description:</label>
+                            <textarea wire:model="churchInfo.description" id="description" rows="4"
+                                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                         </div>
                         <div class="mt-6">
-                            <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">Edit Church</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">
+                                Edit Church
+                            </button>
                         </div>
                         @error('churchInfo.name') <span class="text-red-500">{{ $message }}</span> @enderror
                         @error('churchInfo.description') <span class="text-red-500">{{ $message }}</span> @enderror
@@ -70,6 +75,36 @@
             </div>
         </div>
     @endif
+    @if($deleteMode)
+        <div class="mt-12">
+            <div class="flex justify-center px-4 sm:px-0">
+                <div class="w-full max-w-lg p-6 bg-white shadow-md rounded-md">
+                    @if($confirmingDelete)
+                        <form wire:submit.prevent="deleteChurch">
+                            <p>Are you sure you want to delete this church?</p>
+                            <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-800 rounded-md text-white">
+                                CONFIRM DELETE
+                            </button>
+                            <button type="button" wire:click="resetForm"
+                                    class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">
+                                Cancel
+                            </button>
+                        </form>
+                    @else
+                        <button wire:click="confirmDelete({{ $currentChurch->id }})"
+                                class="px-4 py-2 bg-red-600 hover:bg-red-800 rounded-md text-white">
+                            Delete
+                        </button>
+                        <button type="button" wire:click="resetForm"
+                                class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">
+                            BACK
+                        </button>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
+
     @if($createForm)
         <div class="mt-12"> <!-- Adjust the top margin as needed -->
             <div class="flex justify-center px-4 sm:px-0">
@@ -78,14 +113,19 @@
                     <form wire:submit.prevent="saveChurch">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Church Name:</label>
-                            <input wire:model="churchInfo.name" id="name" type="text" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <input wire:model="churchInfo.name" id="name" type="text"
+                                   class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="mt-4">
-                            <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
-                            <textarea wire:model="churchInfo.description" id="description" rows="4" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            <label for="description"
+                                   class="block text-sm font-medium text-gray-700">Description:</label>
+                            <textarea wire:model="churchInfo.description" id="description" rows="4"
+                                      class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                         </div>
                         <div class="mt-6">
-                            <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">Save Church</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">
+                                Save Church
+                            </button>
                         </div>
                         @error('churchInfo.name') <span class="text-red-500">{{ $message }}</span> @enderror
                         @error('churchInfo.description') <span class="text-red-500">{{ $message }}</span> @enderror
