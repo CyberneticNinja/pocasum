@@ -9,9 +9,9 @@ Route::get('/', function () {
     return view('church_welcome');
 })->name('home-page');
 
-Route::get('/test', function () {
-    return view('dashboard.default');
-});
+Route::get('/churches', function () {
+    return view('churches.index');
+})->name('churches');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

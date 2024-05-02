@@ -20,7 +20,7 @@
                     </a>
                     <a href="#" class="flex items-center space-x-2">
                         <img src="/images/church.webp" alt="Church" style="height: 91px; width: 91px;">
-                        <span>{{ __('Churches') }}</span>
+                        <span>{{ __('churches') }}</span>
                     </a>
                     <a href="#" class="flex items-center space-x-2">
                         <img src="/images/users.webp" alt="Users" style="height: 91px; width: 91px;">
