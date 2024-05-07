@@ -24,8 +24,6 @@ class Groups extends Component
 
     public function mount()
     {
-        //TODO Why if user has not logged in, it goes here
-        // Check if the user is not authenticated
         if (!Auth::check()) {
             // Redirect to the home page
             return redirect()->route('home-page');
