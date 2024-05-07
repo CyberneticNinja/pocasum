@@ -13,6 +13,7 @@ class Groups extends Component
     public bool $tableSummaryDisplay;
     public bool $managedGroupDisplay;
     public bool $deleteDisplay;
+    public bool $createDisplay;
     public $selectedGroup = array();
     public $selectedChurchId;
     public $selectedGroupModel;
@@ -32,6 +33,30 @@ class Groups extends Component
         $this->managedGroupDisplay = false;
         $this->churches = Church::all();
 //        $this->fetchGroups();
+    }
+
+    public function createGroup()
+    {
+        $this->tableSummaryDisplay = false;
+        $this->managedGroupDisplay = false;
+        $this->deleteDisplay = false;
+        $this->createDisplay = true;
+        $this->selectedChurchId = 1;
+//        dd($this->selectedChurchId);
+    }
+
+    public function createNewGroup()
+    {
+        $this->validate();
+        $newGroup = new Group();
+        $newGroup->name = $this->selectedGroup['name'];
+        $newGroup->church_id = $this->selectedChurchId;
+        $newGroup->save();
+
+        $this->tableSummaryDisplay = true;
+        $this->managedGroupDisplay = false;
+        $this->deleteDisplay = false;
+        $this->createDisplay = false;
     }
 
     public function manageGroup(Group $group)
@@ -127,4 +152,6 @@ class Groups extends Component
         $this->description = null;
         $this->groupIdBeingManaged = null;
     }
+
+
 }

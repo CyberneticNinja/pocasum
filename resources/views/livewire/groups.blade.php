@@ -30,29 +30,70 @@
                     </tr>
                 @endforeach
             @endforeach
+            @if(auth()->user()->hasRole('admin'))
+                <!-- Button to trigger create form -->
+                <button wire:click="createGroup"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add New Group
+                </button>
+            @endif
             </tbody>
         </table>
     @endif
-    @if($deleteDisplay)
-            @if($deleteDisplay)
-                <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-                    <div class="bg-white p-6 rounded-md shadow-md">
-                        <p class="text-xl text-gray-800 mb-4">Are you sure you want to delete this group?</p>
-                        <div class="flex justify-between">
-                            <button wire:click="confirmDelete" type="button" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md mr-4">
-                                Confirm Delete
-                            </button>
-                            <button wire:click="cancelDelete" type="button" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md">
-                                Cancel
-                            </button>
-                        </div>
+    @if($createDisplay)
+            <div class="mt-12"> <!-- Adjust the top margin as needed -->
+                <div class="flex justify-center px-4 sm:px-0">
+                    <div class="w-full max-w-lg p-6 bg-white shadow-md rounded-md">
+                        <form wire:submit.prevent="createNewGroup">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Group Name</label>
+                                <input wire:model="selectedGroup.name" id="name" type="text"
+                                       class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-700">Associated Church</label>
+{{--                                    @php--}}
+{{--                                        dd($churches);--}}
+{{--                                    @endphp--}}
+
+                                    <select wire:model="selectedChurchId" class="block w-full px-4 py-2 border rounded-md bg-white">
+                                        @foreach($churches as $church)
+                                            <option value="{{ $church->id }}" {{ $church->id === 1 ? 'selected' : '' }}>
+                                                {{ $church->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <br/>
+                                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">
+                                        Save Group
+                                    </button>
+                            </div>
+                            @error('selectedChurchId') <span class="text-red-500">{{ $message }}</span> @enderror
+                            @error('selectedGroup.name') <span class="text-red-500">{{ $message }}</span> @enderror
+                        </form>
                     </div>
                 </div>
-            @endif
-        @endif
+            </div>
+    @endif
+    @if($deleteDisplay)
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+            <div class="bg-white p-6 rounded-md shadow-md">
+                <p class="text-xl text-gray-800 mb-4">Are you sure you want to delete this group?</p>
+                <div class="flex justify-between">
+                    <button wire:click="confirmDelete" type="button"
+                            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md mr-4">
+                        Confirm Delete
+                    </button>
+                    <button wire:click="cancelDelete" type="button"
+                            class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
     @if($managedGroupDisplay)
         Managing the group
-        <hr/>
         <div class="mt-12"> <!-- Adjust the top margin as needed -->
             <div class="flex justify-center px-4 sm:px-0">
                 <div class="w-full max-w-lg p-6 bg-white shadow-md rounded-md">
@@ -83,7 +124,8 @@
                                 Edit Group
                             </button>
 
-                            <button wire:click="deleteGroup" type="button" class="px-4 py-2 bg-red-500 rounded-md text-white">
+                            <button wire:click="deleteGroup" type="button"
+                                    class="px-4 py-2 bg-red-500 rounded-md text-white">
                                 Delete Group
                             </button>
                         </div>
