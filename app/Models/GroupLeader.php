@@ -20,4 +20,10 @@ class GroupLeader extends Model
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function groupLeaders()
+    {
+        return $this->hasMany(GroupLeader::class);
+    }
+
 }

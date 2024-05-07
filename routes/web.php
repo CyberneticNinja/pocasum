@@ -11,7 +11,11 @@ Route::get('/', function () {
 
 Route::get('/churches', function () {
     return view('churches.index');
-})->name('churches');
+})->name('churches')->middleware(['auth', 'verified']);
+
+Route::get('/groups', function () {
+    return view('groups.index');
+})->name('groups')->middleware(['auth', 'verified']);
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

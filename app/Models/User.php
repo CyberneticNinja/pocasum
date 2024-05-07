@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\GroupLeader;
 
 class User extends Authenticatable
 {
@@ -49,5 +50,11 @@ class User extends Authenticatable
     public function groups()
     {
         return $this->belongsToMany(Group::class);
+    }
+
+    public function isGroupLeader($groupId)
+    {
+        // Check if the user is a group leader for the given group
+        return $this->groups()->where('groups.id', $groupId)->exists();
     }
 }

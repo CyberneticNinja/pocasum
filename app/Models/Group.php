@@ -19,4 +19,9 @@ class Group extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+    public function groupLeaders()
+    {
+        return $this->hasMany(GroupLeader::class);
+    }
 }

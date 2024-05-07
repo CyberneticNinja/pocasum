@@ -15,7 +15,7 @@
         </a>
     @endif
     @if((auth()->user()->hasRole('admin')) || auth()->user()->hasRole('group-leader'))
-        <a href="#" class="flex items-center space-x-2">
+        <a href="{{ route('groups') }}" class="flex items-center space-x-2">
             <img src="/images/group.webp" alt="Groups" style="height: 45px; width: 45px;">
             <span>{{ __('Groups') }}</span>
         </a>
