@@ -13,7 +13,7 @@
 
         <!-- Additional dashboard widgets or info can go here -->
         <div class="mt-4">
-{{--            @include('blueprints.navigations.admin-nav')--}}
+            @include('blueprints.navigations.navigation')
         </div>
         @livewire('churches')
 
