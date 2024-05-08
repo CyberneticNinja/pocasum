@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Church;
 use App\Models\Group;
 use App\Models\GroupLeader;
+use App\Models\GroupUser;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -20,6 +21,7 @@ class Groups extends Component
     public $groups;
     public $churches;
     public $name;
+    public $group_user;
     public $description;
     public $groupIdBeingManaged = null;
 
@@ -32,7 +34,38 @@ class Groups extends Component
         $this->tableSummaryDisplay = true;
         $this->managedGroupDisplay = false;
         $this->churches = Church::all();
-//        $this->fetchGroups();
+        $this->group_user = GroupUser::all();
+    }
+    public function userJoinedGroup($groupId)
+    {
+        return$exists = GroupUser::where('group_id', $groupId)
+            ->where('user_id', Auth::user()->id)
+            ->exists();
+    }
+
+    public function leaveGroup($groupId)
+    {
+        $groupUser = GroupUser::where('group_id', $groupId)
+            ->where('user_id', Auth::user()->id)
+            ->first();
+
+        if ($groupUser) {
+            $groupUser->delete();
+        }
+    }
+
+    public function joinGroup($groupId)
+    {
+        $alreadyJoined = GroupUser::where('group_id', $groupId)
+            ->where('user_id', Auth::user()->id)
+            ->exists();
+
+        if (!$alreadyJoined) {
+            GroupUser::create([
+                'group_id' => $groupId,
+                'user_id' => Auth::id(),
+            ]);
+        }
     }
 
     public function createGroup()

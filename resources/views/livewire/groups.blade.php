@@ -27,6 +27,16 @@
                                 </button>
                             </td>
                         @endif
+                        @php
+                            $userJoinedGroup = $this->userJoinedGroup($group->id);
+                        @endphp
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            @if ($userJoinedGroup)
+                                <button wire:click="leaveGroup({{ $group->id }})" class="bg-red-500 text-white px-4 py-2 rounded-md">Leave</button>
+                            @else
+                                <button wire:click="joinGroup({{ $group->id }})" class="bg-green-500 text-white px-4 py-2 rounded-md">Join</button>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             @endforeach
