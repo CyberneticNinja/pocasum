@@ -17,6 +17,10 @@ Route::get('/groups', function () {
     return view('groups.index');
 })->name('groups')->middleware(['auth', 'verified']);
 
+Route::get('/users', function () {
+    return view('users.index');
+})->name('users')->middleware(['auth', 'verified']);
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

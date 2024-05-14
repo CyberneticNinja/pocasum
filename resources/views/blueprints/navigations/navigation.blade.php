@@ -9,7 +9,7 @@
         <span>{{ __('churches') }}</span>
     </a>
     @if(auth()->user()->hasRole('admin'))
-        <a href="#" class="flex items-center space-x-2">
+        <a href="{{ route('users') }}" class="flex items-center space-x-2">
             <img src="/images/users.webp" alt="Users" style="height: 45px; width: 45px;">
             <span>{{ __('Users') }}</span>
         </a>
