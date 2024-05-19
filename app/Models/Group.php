@@ -20,6 +20,10 @@ class Group extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function groupEvents()
+    {
+        return $this->hasMany(GroupEvent::class, 'group_id', 'id');
+    }
     public function groupLeaders()
     {
         return $this->hasMany(GroupLeader::class);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 //Route::view('/', 'welcome');
@@ -21,6 +22,10 @@ Route::get('/users', function () {
     return view('users.index');
 })->name('users')->middleware(['auth', 'verified']);
 
+Route::get('/calendar', function () {
+    return view('events.index');
+})->name('calendar')->middleware(['auth', 'verified']);
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -40,6 +45,8 @@ Route::view('group-leader/dashboard', 'dashboard.group-leader-dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Route::get('/test', [HomeController::class, 'index']);
 
 Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 

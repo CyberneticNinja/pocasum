@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->text('comments')->nullable();
             $table->foreignId('church_id')->constrained()->onDelete('cascade');
+            $table->string('color', 7)->default('#FFFFFF');  // Add the color column
             $table->timestamps();
         });
     }

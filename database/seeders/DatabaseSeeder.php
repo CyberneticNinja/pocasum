@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
                 GroupsSeeder::class,
                 UserSeeder::class,
                 GroupsSeeder::class,
-                GroupUserSeeder::class
+                GroupUserSeeder::class,
+                GroupEventSeeder::class
             ]
         );
     }

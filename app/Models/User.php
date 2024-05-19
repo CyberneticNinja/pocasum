@@ -54,7 +54,6 @@ class User extends Authenticatable
 
     public function isGroupLeader($groupId)
     {
-        // Check if the user is a group leader for the given group
         return $this->groups()->where('groups.id', $groupId)->exists();
     }
 }

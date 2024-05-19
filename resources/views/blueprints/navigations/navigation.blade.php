@@ -21,7 +21,7 @@
 {{--    @if((auth()->user()->hasRole('admin')) || auth()->user()->hasRole('group-leader'))--}}
 
 {{--    @endif--}}
-    <a href="#" class="flex items-center space-x-2">
+    <a href="{{ route('calendar') }}" class="flex items-center space-x-2">
         <img src="/images/calendar.webp" alt="Calendar" style="height: 45px; width: 45px;">
         <span>{{ __('Calendar') }}</span>
     </a>
