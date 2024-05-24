@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('group_id')->constrained();
             $table->string('color');
-            $table->json('rrule')->nullable();
+            $table->text('rrule')->nullable();
             $table->string('duration')->nullable();
             $table->timestamps();
         });
