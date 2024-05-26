@@ -34,6 +34,7 @@ class Events extends Component
     public bool $isGroupLeaderOfGroup = false;
     public bool $displayCreateEvent = false;
     public bool $displayOneTimeEventCreation = false;
+    public bool $displayRecurringEventCreation = false;
     public array $eventDetails = [];
     public array $newEvents = [];
     public \Illuminate\Database\Eloquent\Collection $churches;
@@ -113,10 +114,24 @@ class Events extends Component
         }
     }
 
-    public function setOneTimeEvent(bool $type): void
+    public function setOneTimeEvent(bool $value): void
     {
-        $this->oneTimeEvent = $type;
-        $this->displayOneTimeEventCreation = true;
+        if($this->oneTimeEvent !== $value)
+        {
+            $this->resetNewEventDetails();
+        }
+        $this->oneTimeEvent = $value;
+
+        if($value)
+        {
+            $this->displayOneTimeEventCreation = true;
+            $this->displayRecurringEventCreation = false;
+        }
+        else
+        {
+            $this->displayOneTimeEventCreation = false;
+            $this->displayRecurringEventCreation = true;
+        }
         $this->showEventModal = false;
         $this->displayCreateEvent = false;
         $this->all = Group::all();
@@ -151,7 +166,17 @@ class Events extends Component
         $event->save();
     }
 
-
+    protected function resetNewEventDetails()
+    {
+        $this->newEventDetails = [
+            'groupId' => 0,
+            'churchId' => 0,
+            'eventDuration' => '',
+            'eventDate'=>'',
+            'eventAddress' =>'',
+            'eventComments'=>''
+        ];
+    }
     #[On('calendar-event-clicked')]
     public function calendarEventClicked($eventDetails)
     {
