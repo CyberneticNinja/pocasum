@@ -105,34 +105,30 @@ class GroupEventSeeder extends Seeder
                 'start_time' => $startTime,
                 'finish_time' => $finishTime,
                 'location_address' => $groupLocations[$gCount],
-                'user_id' => $leader->id, // ID of the group leader
+                'user_id' => $leader->id,
                 'group_id' => $group->id,
-                'color' => $group->color, // Assuming color is set at the group level
+                'color' => $group->color,
                 'rrule' => $rruleArray[$index],
                 'duration' => $duration[$index]
             ]);
             $index++;
             $gCount++;
         }
-        //Put it here user id 22, group 15 at 8:30 - 9:30 am, the comments should have cancelled event
-        // Create a non-recurring event on June 26, 2024
 
         $nonRecurringStartTime = Carbon::create(2024, 6, 26, 8, 30, 0, 'America/New_York');
         $nonRecurringFinishTime = Carbon::create(2024, 6, 26, 9, 30, 0, 'America/New_York');
 
-//        $nonRecurringStartTime->setTimezone('America/New_York');
-//        $nonRecurringFinishTime->setTimezone('America/New_York');
-
+        //one time event
         GroupEvent::create([
             'start_time' => $nonRecurringStartTime,
             'finish_time' => $nonRecurringFinishTime,
             'location_address' => 'Specific location for this event',
-            'user_id' => 22, // Specified user id
-            'group_id' => 15, // Specified group id
-            'color' => '#FF0000', // Example color
-            'comments' => 'Cancelled event', // Adding comments as per requirement
-            'rrule' => null, // No recurrence rule for a non-recurring event
-            'duration' => '01:00:00' // Duration for the event
+            'user_id' => 22,
+            'group_id' => 15,
+            'color' => '#FF0000',
+            'comments' => 'Cancelled event',
+            'rrule' => null,
+            'duration' => '01:00:00'
         ]);
     }
 }
