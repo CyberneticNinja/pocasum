@@ -134,13 +134,13 @@ class Events extends Component
         $this->validate(); // Triggers validation based on selected rules
 
         $event = new GroupEvent();
-        $event->location_address = $this->newEventDetails['churchId'];
+        $event->location_address = $this->newEventDetails['eventAddress'];
         $event->user_id = auth()->user()->id;
         $event->group_id = $this->newEventDetails['groupId'];
         $event->start_time = $this->newEventDetails['eventDate'];
         $group = Group::findOrFail($this->newEventDetails['groupId']);
         $event->color = $group->color;
-
+        $event->duration = $this->newEventDetails['eventDuration'];
         // Convert duration from HH:MM:SS to seconds
         $durationInSeconds = strtotime('1970-01-01 ' . $this->newEventDetails['eventDuration']) - strtotime('1970-01-01 00:00:00');
 
