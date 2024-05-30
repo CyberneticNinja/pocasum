@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('comments')->nullable();
             $table->foreignId('church_id')->constrained()->onDelete('cascade');
-            $table->string('color', 7)->default('#FFFFFF');  // Add the color column
+            $table->string('color', 7)->default('#88CE31');  // Add the color column
             $table->timestamps();
         });
     }
