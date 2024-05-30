@@ -16,10 +16,17 @@ class Events extends Component
         'groupId' => 0,
         'churchId' => 0,
         'eventDuration' => '',
-        'eventDate'=>'',
-        'eventAddress' =>'',
-        'eventComments'=>''
+        'eventDate' => '',
+        'eventDateEnd'=>'',
+        'eventAddress' => '',
+        'eventComments' => '',
+        'recurrenceFrequency' => '',
+        'recurrenceDays' => '',
+        'specificDayOfMonth' => [],
+        'recurrence_interval_monthly' => '',
     ];
+
+    public array $specificDayOfMonth =[];
     public bool $oneTimeEvent = true;
     public int $selectedChurchId = 0;
     public int $selectedGroupId = 0;
@@ -61,6 +68,38 @@ class Events extends Component
             'newEventDetails.eventAddress' => 'required|string',
         ];
     }
+
+    public function recurringEventRules()
+    {
+        return [
+            'newEventDetails.groupId' => 'required|integer|exists:groups,id',
+            'newEventDetails.churchId' => 'required|integer|exists:churches,id',
+            'newEventDetails.eventDuration' => 'required|string',
+            'newEventDetails.eventDate' => 'required|date',
+            'newEventDetails.eventDateEnd' => 'required|date|after:newEventDetails.eventDate',
+            'newEventDetails.eventAddress' => 'required|string',
+            'newEventDetails.recurrenceFrequency' => 'required|string'
+        ];
+    }
+
+
+    public function updatedNewEventDetailsSpecificDayOfMonth($value)
+    {
+        if($value !== "")
+        {
+            if (isset($this->specificDayOfMonth[$value])) {
+                unset($this->specificDayOfMonth[$value]);
+            } else {
+                $this->specificDayOfMonth[$value] = 1;
+            }
+        }
+    }
+
+    public function updatedNewEventDetailsRecurrenceFrequency($value)
+    {
+        $this->newEvents['recurrenceFrequency'] = (string) $value;
+    }
+
     public function updatedNewEventDetailsGroupId($value)
     {
         $this->newEvents['churchId'] = (int) $value;
@@ -91,6 +130,13 @@ class Events extends Component
     {
         $dateTime = new DateTime($value);
         $this->newEventDetails['eventDate'] = $dateTime->format('Y-m-d H:i:s');
+        // Perform additional actions if needed
+    }
+
+    public function updatedNewEventDetailsEventDateEnd($value)
+    {
+        $dateTime = new DateTime($value);
+        $this->newEventDetails['eventDateEnd'] = $dateTime->format('Y-m-d H:i:s');
         // Perform additional actions if needed
     }
 
@@ -131,6 +177,9 @@ class Events extends Component
         {
             $this->displayOneTimeEventCreation = false;
             $this->displayRecurringEventCreation = true;
+            $this->newEvents['recurrenceFrequency'] = "";
+
+//            dd($this->newEvents);
         }
         $this->showEventModal = false;
         $this->displayCreateEvent = false;
@@ -152,7 +201,6 @@ class Events extends Component
         $event->location_address = $this->newEventDetails['eventAddress'];
         $event->user_id = auth()->user()->id;
         $event->group_id = $this->newEventDetails['groupId'];
-        $event->start_time = $this->newEventDetails['eventDate'];
         $group = Group::findOrFail($this->newEventDetails['groupId']);
         $event->color = $group->color;
         $event->duration = $this->newEventDetails['eventDuration'];
@@ -166,6 +214,36 @@ class Events extends Component
         $event->save();
     }
 
+    public function reccuringEventSave()
+    {
+        $this->rules = $this->recurringEventRules();
+        $this->validate();
+
+        $event = new GroupEvent();
+        $event->location_address = $this->newEventDetails['eventAddress'];
+        $event->user_id = auth()->user()->id;
+        $event->group_id = $this->newEventDetails['groupId'];
+        $event->start_time = $this->newEventDetails['eventDate'];
+        $group = Group::findOrFail($this->newEventDetails['groupId']);
+        $event->color = $group->color;
+        $event->duration = $this->newEventDetails['eventDuration'];
+        // Convert duration from HH:MM:SS to seconds
+        $durationInSeconds = strtotime('1970-01-01 ' . $this->newEventDetails['eventDuration']) - strtotime('1970-01-01 00:00:00');
+
+        // Calculate finish_time by adding duration to start_time
+        $finishTime = strtotime($this->newEventDetails['eventDate']) + $durationInSeconds;
+        $event->finish_time = date('Y-m-d H:i:s', $finishTime);
+
+        $rrule = '';
+        if($this->newEventDetails['recurrenceFrequency'] === 'daily')
+        {
+            $eventDate = new \DateTime($this->newEventDetails['eventDate']);
+            $eventDateEnd = new \DateTime($this->newEventDetails['eventDateEnd']);
+            $event->rrule = 'DTSTART:'.$eventDate->format('Ymd\THis\Z')."\nFREQ=DAILY;INTERVAL=1;UNTIL=".$eventDateEnd->format('Ymd\THis\Z');
+        }
+        $event->save();
+    }
+
     protected function resetNewEventDetails()
     {
         $this->newEventDetails = [
@@ -174,7 +252,9 @@ class Events extends Component
             'eventDuration' => '',
             'eventDate'=>'',
             'eventAddress' =>'',
-            'eventComments'=>''
+            'eventComments'=>'',
+            'recurrenceFrequency'=>'',
+            'recurrenceDays'=>''
         ];
     }
     #[On('calendar-event-clicked')]
