@@ -110,17 +110,25 @@ class Events extends Component
         $this->newEventDetails['churchId'] = (int) $value;
         $this->loadGroups();
     }
-    public function updatedNewEventDetailsEventDuration($value)
+
+    public function getFormattedHoursMinSecs($value)
     {
-        // Convert minutes to HH:MM:SS
         $hours = floor($value / 60);
         $minutes = $value % 60;
         $seconds = 0;
 
-        // Format the time as HH:MM:SS
-        $formattedDuration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-        $this->newEventDetails['eventDuration'] = $formattedDuration;
-        // Perform additional actions if needed
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
+    }
+    public function updatedNewEventDetailsEventDuration($value)
+    {
+//        $hours = floor($value / 60);
+//        $minutes = $value % 60;
+//        $seconds = 0;
+//
+//        $formattedDuration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+////        $this->newEventDetails['eventDuration'] = $formattedDuration;
+        $this->newEventDetails['eventDuration'] = $value;
     }
 
     /**
@@ -202,8 +210,9 @@ class Events extends Component
         $event->user_id = auth()->user()->id;
         $event->group_id = $this->newEventDetails['groupId'];
         $group = Group::findOrFail($this->newEventDetails['groupId']);
+        $event->start_time = $this->newEventDetails['eventDate'];
         $event->color = $group->color;
-        $event->duration = $this->newEventDetails['eventDuration'];
+        $event->duration = $this->getFormattedHoursMinSecs($this->newEventDetails['eventDuration']);
         // Convert duration from HH:MM:SS to seconds
         $durationInSeconds = strtotime('1970-01-01 ' . $this->newEventDetails['eventDuration']) - strtotime('1970-01-01 00:00:00');
 
@@ -226,8 +235,7 @@ class Events extends Component
         $event->start_time = $this->newEventDetails['eventDate'];
         $group = Group::findOrFail($this->newEventDetails['groupId']);
         $event->color = $group->color;
-        $event->duration = $this->newEventDetails['eventDuration'];
-        // Convert duration from HH:MM:SS to seconds
+        $event->duration = $this->getFormattedHoursMinSecs($this->newEventDetails['eventDuration']);        // Convert duration from HH:MM:SS to seconds
         $durationInSeconds = strtotime('1970-01-01 ' . $this->newEventDetails['eventDuration']) - strtotime('1970-01-01 00:00:00');
 
         // Calculate finish_time by adding duration to start_time
