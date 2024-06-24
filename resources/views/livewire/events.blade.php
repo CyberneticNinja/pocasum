@@ -206,7 +206,8 @@
                         @if($newEventDetails['groupId'] !== 0)
                             <div class="w-full md:w-1/2 px-2">
                                 <div class="mb-4">
-                                    <label for="event-date" class="block text-gray-700 font-bold mb-2">Event Date Start:</label>
+                                    <label for="event-date" class="block text-gray-700 font-bold mb-2">Event Date
+                                        Start:</label>
                                     <input type="datetime-local" id="event-date"
                                            wire:model.live="newEventDetails.eventDate"
                                            class="border rounded-md w-full px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500"/>
@@ -255,7 +256,8 @@
                             </div>
                             <div class="w-full md:w-1/2 px-2">
                                 <div class="mb-4">
-                                    <label for="event-date" class="block text-gray-700 font-bold mb-2">Event Date End:</label>
+                                    <label for="event-date" class="block text-gray-700 font-bold mb-2">Event Date
+                                        End:</label>
                                     <input type="datetime-local" id="event-date"
                                            wire:model.live="newEventDetails.eventDateEnd"
                                            class="border rounded-md w-full px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500"/>
@@ -314,15 +316,6 @@
                                     @endif
 
 
-                                    <!-- ------------------------>
-
-
-
-
-
-
-
-
                                     @if($newEventDetails['recurrenceFrequency'] === 'monthly')
                                         @php
                                             function ordinal($number) {
@@ -348,8 +341,12 @@
                                         @endphp
                                         <div class="w-full md:w-1/2 px-2">
                                             <div class="mb-4">
-                                                <label for="recurrence_interval_monthly" class="block text-gray-700 font-bold mb-2">Monthly Recurrence Interval:</label>
-                                                <select wire:model.live="newEventDetails.recurrence_interval_monthly" id="recurrence_interval_monthly" name="recurrence_interval_monthly"
+                                                <label for="recurrence_interval_monthly"
+                                                       class="block text-gray-700 font-bold mb-2">Monthly Recurrence
+                                                    Interval:</label>
+                                                <select wire:model.live="newEventDetails.recurrence_interval_monthly"
+                                                        id="recurrence_interval_monthly"
+                                                        name="recurrence_interval_monthly"
                                                         class="border rounded-md w-full px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                                     <option value="">Select Interval</option>
                                                     <option value="1">Every Month</option>
@@ -365,23 +362,30 @@
                                         </div>
                                         <div class="w-full md:w-1/2 px-2">
                                             <div class="mb-4">
-                                                <label for="specific_day_of_month" class="block text-gray-700 font-bold mb-2">Specific Day of the Month:</label>
-                                                <select wire:model.live="newEventDetails.specificDayOfMonth" id="specific_day_of_month" name="specific_day_of_month"
+                                                <label for="specific_day_of_month"
+                                                       class="block text-gray-700 font-bold mb-2">Specific Day of the
+                                                    Month:</label>
+
+                                                <select wire:model.live="newEventDetails.specificDayOfMonth"
+                                                        id="specific_day_of_month" name="specific_day_of_month"
                                                         class="border rounded-md w-full px-3 py-2 focus:outline-none focus:ring-1 focus:ring-indigo-500">
                                                     <option value="">Select Specific Day</option>
                                                     @foreach(['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'] as $day)
                                                         @for($i = 1; $i <= 4; $i++)
                                                             @if(isset($specificDayOfMonth[$i .$day]) == 1)
-                                                                <option value="{{ $i . $day }}">Every {{ ordinal($i) }} {{ $day }} (selected)</option>
+                                                                <option value="{{ $i . $day }}">
+                                                                    Every {{ ordinal($i) }} {{ $day }} (selected)
+                                                                </option>
                                                             @else
-                                                                <option value="{{ $i . $day }}">Every {{ ordinal($i) }} {{ $day }} </option>
+                                                                <option value="{{ $i . $day }}">
+                                                                    Every {{ ordinal($i) }} {{ $day }} </option>
                                                             @endif
                                                         @endfor
-                                                            @if(isset($specificDayOfMonth['-1'.$day]) == 1)
-                                                                <option value="-1{{ $day }}">Last {{ $day }} </option>
-                                                            @else
-                                                                <option value="-1{{ $day }}">Last {{ $day }}</option>
-                                                            @endif
+                                                        @if(isset($specificDayOfMonth['-1'.$day]) == 1)
+                                                            <option value="-1{{ $day }}">Last {{ $day }} (selected) </option>
+                                                        @else
+                                                            <option value="-1{{ $day }}">Last {{ $day }}</option>
+                                                        @endif
 
                                                     @endforeach
                                                 </select>
@@ -392,13 +396,6 @@
                                         </div>
 
                                     @endif
-
-
-
-                                    <!-- ------------------------>
-
-
-
 
                                 </div>
                             </div>
@@ -417,6 +414,7 @@
                     @endif
                 </div>
             </div>
+
         @endif
     </div>
 </div>

@@ -6,6 +6,7 @@ use App\Models\Church;
 use App\Models\Group;
 use App\Models\GroupEvent;
 use DateTime;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -85,13 +86,18 @@ class Events extends Component
 
     public function updatedNewEventDetailsSpecificDayOfMonth($value)
     {
-        if($value !== "")
+        if($value !== "")//remove
         {
-            if (isset($this->specificDayOfMonth[$value])) {
+            if (isset($this->specificDayOfMonth[$value]) == 1) {
                 unset($this->specificDayOfMonth[$value]);
             } else {
                 $this->specificDayOfMonth[$value] = 1;
+//                dd($value);
             }
+//            if($value == '-1SU')
+//            {
+//                dd($this->specificDayOfMonth);
+//            }
         }
     }
 
@@ -122,12 +128,6 @@ class Events extends Component
     }
     public function updatedNewEventDetailsEventDuration($value)
     {
-//        $hours = floor($value / 60);
-//        $minutes = $value % 60;
-//        $seconds = 0;
-//
-//        $formattedDuration = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-////        $this->newEventDetails['eventDuration'] = $formattedDuration;
         $this->newEventDetails['eventDuration'] = $value;
     }
 
@@ -249,7 +249,39 @@ class Events extends Component
             $eventDateEnd = new \DateTime($this->newEventDetails['eventDateEnd']);
             $event->rrule = 'DTSTART:'.$eventDate->format('Ymd\THis\Z')."\nFREQ=DAILY;INTERVAL=1;UNTIL=".$eventDateEnd->format('Ymd\THis\Z');
         }
+        elseif($this->newEventDetails['recurrenceFrequency'] === 'weekly')
+        {
+            $eventDate = new \DateTime($this->newEventDetails['eventDate']);
+            $eventDateEnd = new \DateTime($this->newEventDetails['eventDateEnd']);
+            $byDay = 'BYDAY=';
+            foreach ($this->newEventDetails['recurrence_days'] as $day => $value)
+            {
+                if($value == 1)
+                {
+                    $byDay = $byDay.''.$day.',';
+                }
+            }
+            $byDay = substr($byDay, 0, -1);
+            $event->rrule = 'DTSTART:'.$eventDate->format('Ymd\THis\Z')."\nFREQ=WEEKLY;INTERVAL=".$this->newEventDetails['recurrence_interval'].";".$byDay.";UNTIL=".$eventDateEnd->format('Ymd\THis\Z');
+        }
+        elseif($this->newEventDetails['recurrenceFrequency'] === 'monthly') {
+            $eventDate = new \DateTime($this->newEventDetails['eventDate']);
+            $eventDateEnd = new \DateTime($this->newEventDetails['eventDateEnd']);
+
+            $byDay = 'BYDAY=';
+            foreach ($this->specificDayOfMonth as $day => $value)
+            {
+                if($value == 1)
+                {
+                    $byDay = $byDay.''.$day.',';
+                }
+            }
+            $byDay = substr($byDay, 0, -1);
+            $event->rrule = 'DTSTART:'.$eventDate->format('Ymd\THis\Z')."\nFREQ=MONTHLY;INTERVAL=".$this->newEventDetails['recurrence_interval_monthly'].";".$byDay.";UNTIL=".$eventDateEnd->format('Ymd\THis\Z');
+        }
         $event->save();
+
+        return to_route('calendar');
     }
 
     protected function resetNewEventDetails()
@@ -344,7 +376,12 @@ class Events extends Component
         return 'Event not found';
     }
 
-    public function deleteEvent($deleteSeries): void
+    /**
+     * @param $deleteSeries
+     * @return RedirectResponse
+     * @throws \Exception
+     */
+    public function deleteEvent($deleteSeries)
     {
         $eventId = $this->eventDetails['id'];
         $event = GroupEvent::findOrFail($eventId);
@@ -393,6 +430,7 @@ class Events extends Component
 
         $this->showEventModal = false;
         $this->dispatch('refreshCalendar');
+        return to_route('calendar');
     }
 
     public function render()
