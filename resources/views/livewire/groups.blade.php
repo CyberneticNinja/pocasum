@@ -72,6 +72,17 @@
                                             </option>
                                         @endforeach
                                     </select>
+
+                                    <select wire:model.live = selectedColor>
+                                        @foreach($darkColors as $dc)
+                                            <option value="{{ $dc['hex'] }}">
+                                                {{ $dc['name'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <br/>
+                                    <div style="background-color: {{ $selectedColor }}; width: 30%; height: 20px; margin: 0 auto;"> <p>&nbsp;</p> </div>
+
                                 </div>
                                 <br/>
                                     <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 rounded-md text-white">
@@ -109,12 +120,12 @@
                 <div class="w-full max-w-lg p-6 bg-white shadow-md rounded-md">
                     <form wire:submit.prevent="saveGroup">
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700">Church Name:</label>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Group Name:</label>
                             <input wire:model="selectedGroup.name" id="name" type="text"
                                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
 
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700">Group Name:</label>
+                                <label for="name" class="block text-sm font-medium text-gray-700">Church Name:</label>
                                 <select wire:model="selectedChurchId"
                                         class="block w-full px-4 py-2 border rounded-md bg-white">
                                     <option value="">Select a church</option>
@@ -126,6 +137,21 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                            <div>
+                                <select wire:model.live = selectedColor>
+                                    @foreach($darkColors as $dc)
+                                        <option value="{{ $dc['hex'] }}">
+                                            @if($selectedColor === $dc['hex'])
+                                                selected
+                                            @endif
+                                            {{ $dc['name'] }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <br/>
+                                <div style="background-color: {{ $selectedColor }}; width: 30%; height: 20px; margin: 0 auto;"> <p>&nbsp;</p> </div>
+
                             </div>
                         </div>
 

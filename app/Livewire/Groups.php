@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Church;
 use App\Models\Group;
+use App\Models\GroupEvent;
 use App\Models\GroupLeader;
 use App\Models\GroupUser;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,104 @@ class Groups extends Component
     public bool $managedGroupDisplay;
     public bool $deleteDisplay;
     public bool $createDisplay;
+    public $selectedColor = '#000000';
+
+    public $color = '#283194';
+    public $darkColors = [
+        'black' => [
+            'name' => 'Black',
+            'hex' => '#000000',
+        ],
+        'navy' => [
+            'name' => 'Navy',
+            'hex' => '#000080',
+        ],
+        'dark-slate-blue' => [
+            'name' => 'Dark Slate Blue',
+            'hex' => '#483D8B',
+        ],
+        'midnight-blue' => [
+            'name' => 'Midnight Blue',
+            'hex' => '#191970',
+        ],
+        'maroon' => [
+            'name' => 'Maroon',
+            'hex' => '#800000',
+        ],
+        'purple' => [
+            'name' => 'Purple',
+            'hex' => '#800080',
+        ],
+        'indigo' => [
+            'name' => 'Indigo',
+            'hex' => '#4B0082',
+        ],
+        'dark-green' => [
+            'name' => 'Dark Green',
+            'hex' => '#006400',
+        ],
+        'forest-green' => [
+            'name' => 'Forest Green',
+            'hex' => '#228B22',
+        ],
+        'teal' => [
+            'name' => 'Teal',
+            'hex' => '#008080',
+        ],
+        'dark-red' => [
+            'name' => 'Dark Red',
+            'hex' => '#8B0000',
+        ],
+        'brown' => [
+            'name' => 'Brown',
+            'hex' => '#A52A2A',
+        ],
+        'gray-dark' => [
+            'name' => 'Gray (Dark)',
+            'hex' => '#4F4F4F',
+        ],
+        'charcoal' => [
+            'name' => 'Charcoal',
+            'hex' => '#36454C',
+        ],
+        'black-coffee' => [
+            'name' => 'Black Coffee',
+            'hex' => '#3B2F2F',
+        ],
+        'orange' => [ // Additional color
+            'name' => 'Orange',
+            'hex' => '#FF5733',
+        ],
+        'teal-light' => [ // Additional color
+            'name' => 'Teal Light',
+            'hex' => '#4CAF50',
+        ],
+        'amber' => [ // Additional color
+            'name' => 'Amber',
+            'hex' => '#FFC107',
+        ],
+        'light-blue' => [ // Additional color
+            'name' => 'Light Blue',
+            'hex' => '#00BCD4',
+        ],
+        'deep-purple' => [ // Additional color
+            'name' => 'Deep Purple',
+            'hex' => '#9C27B0',
+        ],
+        'red' => [ // Additional color
+            'name' => 'Red',
+            'hex' => '#F44336',
+        ],
+        'indigo-dark' => [ // Additional color
+            'name' => 'Indigo Dark',
+            'hex' => '#3F51B5',
+        ],
+        'yellow' => [ // Additional color
+            'name' => 'Yellow',
+            'hex' => '#FFEB3B',
+        ],
+    ];
+
     public $selectedGroup = array();
     public $selectedChurchId;
     public $selectedGroupModel;
@@ -83,6 +182,7 @@ class Groups extends Component
         $this->validate();
         $newGroup = new Group();
         $newGroup->name = $this->selectedGroup['name'];
+        $newGroup->color = $this->selectedColor;
         $newGroup->church_id = $this->selectedChurchId;
         $newGroup->save();
 
@@ -97,6 +197,7 @@ class Groups extends Component
         $this->tableSummaryDisplay = false;
         $this->managedGroupDisplay = true;
         $this->selectedGroup['name'] = $group->name;
+        $this->selectedColor = $group->color;
         $this->selectedChurchId = $group->church_id;
         $this->selectedGroupModel = $group;
     }
@@ -106,6 +207,16 @@ class Groups extends Component
         $this->validate();
         $this->selectedGroupModel->name = $this->selectedGroup['name'];
         $this->selectedGroupModel->church_id = $this->selectedChurchId;
+        $this->selectedGroupModel->color = $this->selectedColor;
+
+//        $eventWithGroupId = GroupEvent::with('group')
+//            ->where('group_id', '=', $this->selectedGroupModel->id)
+//            ->get();
+
+//        foreach ($eventWithGroupId as $event) {
+//            $event->color = $this->selectedColor;
+//        }
+
         $this->selectedGroupModel->save();
         $this->tableSummaryDisplay = true;
         $this->managedGroupDisplay = false;
@@ -135,6 +246,7 @@ class Groups extends Component
             $this->groupIdBeingManaged = $group->id;
             $this->name = $group->name;
             $this->description = $group->description;
+            $this->selectedColor = $group->color;
         } else {
             session()->flash('error', 'Unauthorized to manage this group.');
         }
